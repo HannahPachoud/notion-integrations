@@ -25,7 +25,17 @@ router.get("/", async function (request, res) {
     },
       });
 
-    res.send([dbValues]);
+    const expenses = [];
+    dbValues.results.map(row => {
+        expenses.push({
+            id: row.id,
+            title: row.properties.Name.title[0].text.content,
+            date: row.properties.Date.date.start,
+            amount: row.properties.Amount.number,
+            category: row.properties.Category.relation[0].id
+        })
+    })
+    res.send([expenses]);
 });
 
 module.exports = router;
