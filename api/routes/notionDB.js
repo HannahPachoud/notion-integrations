@@ -7,9 +7,25 @@ const notion = new Client({ auth: process.env.NOTION_KEY })
 router.get("/", async function (request, res) {
     const dbValues = await notion.databases.query({
         database_id: process.env.NOTION_DATABASE_ID,
+         filter: {
+      and: [
+        {
+          property: "Date",
+          date: {
+            on_or_after: "2023-10-17",
+          },
+        },
+        {
+          property: "Date",
+          date: {
+            on_or_before: "2023-10-17",
+          },
+        },
+      ],
+    },
       });
 
-    res.send([JSON.stringify(dbValues)]);
+    res.send([dbValues]);
 });
 
 module.exports = router;

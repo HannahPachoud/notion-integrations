@@ -34,7 +34,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p className="App-intro">{this.state.apiResponse}</p>
-          <p className="App-intro">{JSON.stringify(this.state.notionResponse, null, 2)}</p>
+          <p className="App-intro">{this.state.notionResponse}</p>
           <a
             className="App-link"
             href="https://reactjs.org"
