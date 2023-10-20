@@ -35,7 +35,7 @@ router.get("/", async function (request, res) {
             category: row.properties.Category.relation[0].id
         })
     })
-    res.send([expenses]);
+    res.send(expenses);
 });
 
 module.exports = router;

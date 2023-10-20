@@ -7,7 +7,7 @@ class App extends Component {
   constructor(props){
     super(props);
     this.state = {apiResponse: "",
-  notionResponse: ""};
+  notionResponse: []};
   }
 
   callAPI(){
@@ -19,7 +19,7 @@ class App extends Component {
   callNotionAPI(){
     fetch("http://localhost:9000/notionDB")
           .then(res => res.text())
-          .then(res => this.setState({ notionResponse: res }));
+          .then(res => this.setState({ notionResponse: JSON.parse(res) }));
   }
 
     
@@ -34,7 +34,7 @@ class App extends Component {
         <header className="App-header">
           <img src={logo} className="App-logo" alt="logo" />
           <p className="App-intro">{this.state.apiResponse}</p>
-          <p className="App-intro">{this.state.notionResponse}</p>
+          <p className="App-intro">{console.log(this.state.notionResponse)}</p>
           <a
             className="App-link"
             href="https://reactjs.org"
