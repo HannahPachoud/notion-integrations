@@ -1,53 +1,39 @@
-import React, {Component} from "react";
-import logo from './logo.svg';
-import './App.css';
+import React, { Component, useEffect, useState } from "react";
+import logo from "./logo.svg";
+import "./App.css";
 
-class App extends Component {
+export default function App() {
+  const [state, setState] = useState({ apiResponse: "", notionResponse: [] });
 
-  constructor(props){
-    super(props);
-    this.state = {apiResponse: "",
-  notionResponse: []};
-  }
-
-  callAPI(){
+  const callAPI = () =>
     fetch("http://localhost:9000/testAPI")
-          .then(res => res.text())
-          .then(res => this.setState({ apiResponse: res }));
-  }
+      .then((res) => res.text())
+      .then((res) => setState({ apiResponse: res, notionResponse: state.notionResponse }));
 
-  callNotionAPI(){
+  const callNotionAPI = () => 
     fetch("http://localhost:9000/notionDB")
-          .then(res => res.text())
-          .then(res => this.setState({ notionResponse: JSON.parse(res) }));
-  }
+      .then((res) => res.text())
+      .then((res) => setState({apiResponse: state.apiResponse, notionResponse: JSON.parse(res) }));
 
-    
-  componentWillMount(){
-    this.callAPI();
-    this.callNotionAPI();
-  }
+  useEffect(() => {
+    callNotionAPI().then(callAPI);
+  }, []);
 
-  render(){
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p className="App-intro">{this.state.apiResponse}</p>
-          <p className="App-intro">{console.log(this.state.notionResponse)}</p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
-
+  return (
+    <div className="App">
+      <header className="App-header">
+        <img src={logo} className="App-logo" alt="logo" />
+        <p className="App-intro">{state.apiResponse}</p>
+        <p className="App-intro">{JSON.stringify(state.notionResponse)}</p>
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
-
-export default App;
