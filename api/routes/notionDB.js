@@ -12,13 +12,13 @@ router.get("/", async function (request, res) {
         {
           property: "Date",
           date: {
-            on_or_after: "2023-10-17",
+            on_or_after: "2023-11-04",
           },
         },
         {
           property: "Date",
           date: {
-            on_or_before: "2023-10-17",
+            on_or_before: "2023-11-17",
           },
         },
       ],
