@@ -40,19 +40,28 @@ export default function App() {
     .map(([category, amount]) => ({category, amount}));
   console.log(data)
 
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`$${payload[0].value}`}</p>
+        </div>
+      );
+    }
+  
+    return null;
+  };
+  
+
   return (
     <div className="App" style={{ height: 400 }}>
       <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        {/* <p className="App-intro">{expenses)}</p> */}
-        {/* <Graph categories={categorise(expenses)}></Graph> */}
         <BarChart width={730} height={250} data={data}>
-          <CartesianGrid strokeDasharray="3 3" />
           <XAxis dataKey="category" />
           <YAxis />
-          <Tooltip />
+          <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Bar dataKey="amount" fill="#8884d8" />
+          <Bar dataKey="amount" fill="#82ca9d" />
         </BarChart>
           <PieChart width={730} height={250}>
             <Pie
