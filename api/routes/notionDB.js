@@ -38,37 +38,21 @@ router.get("/", async function (request, res) {
     res.send(expenses);
 });
 
-module.exports = router;
 
-// // Create new databasn  e. The page ID is set in the environment variables.
-// app.post("/databases", async function (request, response) {
-//     const pageId = process.env.NOTION_PAGE_ID
-//     const title = request.body.dbName
-  
-//     try {
-//       const newDb = await notion.databases.create({
-//         parent: {
-//           type: "page_id",
-//           page_id: pageId,
-//         },
-//         title: [
-//           {
-//             type: "text",
-//             text: {
-//               content: title,
-//             },
-//           },
-//         ],
-//         properties: {
-//           Name: {
-//             title: {},
-//           },
-//         },
-//       })
-//       response.json({ message: "success!", data: newDb })
-//       console.log(newDb);
-//     } catch (error) {
-//       response.json({ message: "error", error })
-//     }
-//   })
-  
+router.get("/categories", async function (request, res) {
+  const dbValues = await notion.databases.query({
+      database_id: process.env.NOTION_CATEGORIES_DATABASE_ID,
+    });
+
+    const categories = [];
+    dbValues.results.map(row => {
+        categories.push({
+            id: row.id,
+            name: row.properties.Name.title[0].text.content,
+        })
+    })
+    res.send(categories);
+
+});
+
+module.exports = router;

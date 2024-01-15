@@ -10,6 +10,7 @@ import {
   Bar,
   PieChart,
   Pie,
+  Cell,
   ResponsiveContainer,
 } from "recharts";
 import { ResponsiveBar } from "@nivo/bar";
@@ -18,15 +19,25 @@ import "./App.css";
 import Graph from "./components/Graph";
 
 export default function App() {
+  const barColors = ["#1f77b4", "#ff7f0e", "#2ca02c"]
+
   const [expenses, setExpenses] = useState([]);
+  const [categories, setCategories] = useState([]);
 
   const callNotionAPI = () =>
     fetch("http://localhost:9000/notionDB")
       .then((res) => res.text())
       .then((res) => setExpenses(JSON.parse(res)));
 
+  const getNotionCategories = () =>
+      fetch("http://localhost:9000/notionDB/categories")
+          .then((res) => res.text())
+          .then((res) => setCategories(JSON.parse(res)));
+
+
   useEffect(() => {
     callNotionAPI();
+    getNotionCategories();
   }, []);
 
   const categorise = (expenses) =>
@@ -61,7 +72,8 @@ export default function App() {
           <YAxis />
           <Tooltip content={<CustomTooltip />} />
           <Legend />
-          <Bar dataKey="amount" fill="#82ca9d" />
+          <Bar dataKey="amount" fill="#00a0fc">
+          </Bar>
         </BarChart>
           <PieChart width={730} height={250}>
             <Pie
