@@ -36,7 +36,8 @@ export default function App() {
             ([category, amount]) => (
                 {
                     category: categories.find(x => x.id === category)?.name,
-                    amount
+                    amount,
+                    fill: barColors[Math.floor(amount) % barColors.length]
                 }
             )
         );
@@ -58,15 +59,7 @@ export default function App() {
         <div className="App" style={{height: 400}}>
             <header className="App-header">
                 <BarChart width={730} height={250} data={data}>
-                    <XAxis dataKey="category"/>
-                    <YAxis/>
-                    <Tooltip content={<CustomTooltip/>}/>
-                    <Legend/>
-                    <Bar dataKey="amount" fill="#00a0fc">
-                    </Bar>
-                </BarChart>
-                <BarChart width={730} height={250} data={data}>
-                    <XAxis dataKey="category"/>
+                    <XAxis dataKey="category" interval={0}/>
                     <YAxis/>
                     <Tooltip content={<CustomTooltip/>}/>
                     <Legend/>
