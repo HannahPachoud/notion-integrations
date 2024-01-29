@@ -64,7 +64,7 @@ export default function App() {
     <div className="App" style={{ height: 200 }}>
       <ResponsiveBar
           width={500}
-          height={400}
+          height={300}
           data={data}
           keys={["amount"]}
           maxValue={2500}
@@ -77,7 +77,8 @@ export default function App() {
           }}
           indexBy="category"
           enableLabel={false}
-          colors={[barColor]}
+          colors={{scheme: 'purpleRed_green'}}
+          colorBy={"index"}
           borderRadius={2}
           axisLeft={{
             tickValues: 7
