@@ -10,6 +10,8 @@ import {
   YAxis,
 } from "recharts";
 import "./App.css";
+import Graph from "./components/Graph";
+import {ResponsiveBar} from "@nivo/bar";
 
 export default function App() {
   const barColors = ["#1f77b4", "#ff7f0e", "#2ca02c"];
@@ -42,8 +44,7 @@ export default function App() {
 
   const data = [...categorise(expenses)].map(([category, amount]) => ({
     category: categories.find((x) => x.id === category)?.name,
-    amount,
-    fill: barColors[Math.floor(amount) % barColors.length],
+    amount
   }));
 
   const CustomTooltip = ({ active, payload, label }) => {
@@ -56,42 +57,32 @@ export default function App() {
     }
     return null;
   };
+  const barColor = "#bd7a0f";
+  console.log(data)
 
   return (
-    <div className="App" style={{ height: 400 }}>
-      <header className="App-header">
-        {searchParams.get("graph") == "pie" ? (
-          <PieChart width={730} height={250}>
-            <Pie
-              data={data}
-              dataKey="amount"
-              nameKey="category"
-              cx="50%"
-              cy="50%"
-              outerRadius={50}
-              fill="#8884d8"
-            />
-            <Tooltip />
-          </PieChart>
-        ) : (
-          <BarChart width={730} height={250} data={data}>
-            <XAxis dataKey="category" interval={0} />
-            <YAxis />
-            <Tooltip content={<CustomTooltip />} />
-            <Legend />
-            <Bar dataKey="amount" fill="#00a0fc"></Bar>
-          </BarChart>
-        )}
-
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div className="App" style={{ height: 200 }}>
+      <ResponsiveBar
+          width={500}
+          height={400}
+          data={data}
+          keys={["amount"]}
+          maxValue={2500}
+          padding={0.6}
+          margin={{
+            top: 10,
+            right: 10,
+            bottom: 36,
+            left: 36
+          }}
+          indexBy="category"
+          enableLabel={false}
+          colors={[barColor]}
+          borderRadius={2}
+          axisLeft={{
+            tickValues: 7
+          }}
+      />
     </div>
   );
 }
