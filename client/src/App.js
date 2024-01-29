@@ -1,43 +1,97 @@
-import React, {Component} from "react";
-import logo from './logo.svg';
-import './App.css';
+import React, { useEffect, useState } from "react";
+import {
+  Bar,
+  BarChart,
+  Legend,
+  Pie,
+  PieChart,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
+import "./App.css";
 
-class App extends Component {
+export default function App() {
+  const barColors = ["#1f77b4", "#ff7f0e", "#2ca02c"];
 
-  constructor(props){
-    super(props);
-    this.state = {apiResponse: ""};
-  }
+  const [expenses, setExpenses] = useState([]);
+  const [categories, setCategories] = useState([]);
+  const searchParams = new URLSearchParams(window.location.search);
 
-  callAPI(){
-    fetch("http://localhost:9000/testAPI")
-          .then(res => res.text())
-          .then(res => this.setState({ apiResponse: res }));
-  }
-    
-  componentWillMount(){
-    this.callAPI();
-  }
+  const callNotionAPI = () =>
+    fetch(`http://localhost:9000/notionDB${window.location.search}`)
+      .then((res) => res.text())
+      .then((res) => setExpenses(JSON.parse(res)));
 
-  render(){
-    return (
-      <div className="App">
-        <header className="App-header">
-          <img src={logo} className="App-logo" alt="logo" />
-          <p className="App-intro">{this.state.apiResponse}</p>
-          <a
-            className="App-link"
-            href="https://reactjs.org"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Learn React
-          </a>
-        </header>
-      </div>
-    );
-  }
+  const getNotionCategories = () =>
+    fetch("http://localhost:9000/notionDB/categories")
+      .then((res) => res.text())
+      .then((res) => setCategories(JSON.parse(res)));
 
+  useEffect(() => {
+    callNotionAPI();
+    getNotionCategories();
+  }, []);
+
+  const categorise = (expenses) =>
+    expenses.reduce((acc, item) => {
+      const prevValue = acc.get(item.category) || 0;
+      acc.set(item.category, prevValue + item.amount);
+      return acc;
+    }, new Map());
+
+  const data = [...categorise(expenses)].map(([category, amount]) => ({
+    category: categories.find((x) => x.id === category)?.name,
+    amount,
+    fill: barColors[Math.floor(amount) % barColors.length],
+  }));
+
+  const CustomTooltip = ({ active, payload, label }) => {
+    if (active && payload && payload.length) {
+      return (
+        <div className="custom-tooltip">
+          <p className="label">{`$${payload[0].value}`}</p>
+        </div>
+      );
+    }
+    return null;
+  };
+
+  return (
+    <div className="App" style={{ height: 400 }}>
+      <header className="App-header">
+        {searchParams.get("graph") == "pie" ? (
+          <PieChart width={730} height={250}>
+            <Pie
+              data={data}
+              dataKey="amount"
+              nameKey="category"
+              cx="50%"
+              cy="50%"
+              outerRadius={50}
+              fill="#8884d8"
+            />
+            <Tooltip />
+          </PieChart>
+        ) : (
+          <BarChart width={730} height={250} data={data}>
+            <XAxis dataKey="category" interval={0} />
+            <YAxis />
+            <Tooltip content={<CustomTooltip />} />
+            <Legend />
+            <Bar dataKey="amount" fill="#00a0fc"></Bar>
+          </BarChart>
+        )}
+
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+          Learn React
+        </a>
+      </header>
+    </div>
+  );
 }
-
-export default App;
