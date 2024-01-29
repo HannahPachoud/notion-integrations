@@ -1,16 +1,5 @@
 import React, { useEffect, useState } from "react";
-import {
-  Bar,
-  BarChart,
-  Legend,
-  Pie,
-  PieChart,
-  Tooltip,
-  XAxis,
-  YAxis,
-} from "recharts";
 import "./App.css";
-import Graph from "./components/Graph";
 import {ResponsiveBar} from "@nivo/bar";
 
 export default function App() {
@@ -47,30 +36,23 @@ export default function App() {
     amount
   }));
 
-  const CustomTooltip = ({ active, payload, label }) => {
-    if (active && payload && payload.length) {
-      return (
-        <div className="custom-tooltip">
-          <p className="label">{`$${payload[0].value}`}</p>
-        </div>
-      );
-    }
-    return null;
-  };
   const barColor = "#bd7a0f";
   console.log(data)
+    const amounts = data.filter(([category, amount]) => ({amount}));
+    // const max = Math.max(amounts)
+    console.log(amounts);
 
   return (
-    <div className="App" style={{ height: 200 }}>
+    <div className="App" style={{ height: 300 }}>
       <ResponsiveBar
-          width={500}
+          width={800}
           height={300}
           data={data}
           keys={["amount"]}
           maxValue={2500}
           padding={0.6}
           margin={{
-            top: 10,
+            top: 50,
             right: 10,
             bottom: 36,
             left: 36
