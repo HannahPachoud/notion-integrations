@@ -5,6 +5,8 @@ const { Client } = require("@notionhq/client")
 const notion = new Client({ auth: process.env.NOTION_KEY })
 
 router.get("/", async function (request, res) {
+    const startDate = request.query.startDate;
+    const endDate = request.query.endDate;
     const dbValues = await notion.databases.query({
         database_id: process.env.NOTION_DATABASE_ID,
          filter: {
@@ -12,13 +14,13 @@ router.get("/", async function (request, res) {
         {
           property: "Date",
           date: {
-            on_or_after: "2023-11-04",
+            on_or_after: startDate,
           },
         },
         {
           property: "Date",
           date: {
-            on_or_before: "2023-11-17",
+            on_or_before: endDate,
           },
         },
       ],

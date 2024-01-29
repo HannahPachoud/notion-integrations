@@ -9,7 +9,7 @@ export default function App() {
     const [categories, setCategories] = useState([]);
 
     const callNotionAPI = () =>
-        fetch("http://localhost:9000/notionDB")
+        fetch(`http://localhost:9000/notionDB${window.location.search}`)
             .then((res) => res.text())
             .then((res) => setExpenses(JSON.parse(res)));
 
