@@ -2,7 +2,6 @@ import {ResponsiveBar} from '@nivo/bar'
 import React from "react";
 
 export default function Graph(data) {
-    // console.log("graph.js", props)
     if (!data) return;
     return (<div className="App" style={{height: 300}}>
         <ResponsiveBar
